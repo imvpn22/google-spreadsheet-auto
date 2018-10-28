@@ -16,6 +16,14 @@ const TOKEN_PATH = 'token.json';
 const app = express();
 const port = 5000;
 
+// fs.open('./data.txt', (err, fd) => {
+//   if(err){
+//     console.log(`Error:${err}`);
+//   } else {
+//     console.log('file is created!');
+//   }
+// });
+
 // Load client secrets from a local file.
 fs.readFile('credentials.json', (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
@@ -23,7 +31,7 @@ fs.readFile('credentials.json', (err, content) => {
 });
 
 function authorize(credentials, callback) {
-  console.log(`Autharizing with User Credentials:`)
+  console.log(`Authorizing with User Credentials:`)
   // console.log(credentials);
   const {client_secret, client_id, redirect_uris} = credentials.installed;
   const oAuth2Client = new google.auth.OAuth2(
@@ -63,14 +71,15 @@ function getNewToken(oAuth2Client, callback) {
 }
 
 function listMajors(auth) {
+  //send mail after every minute:5 second 
   var j = schedule.scheduleJob('5 * * * * *', () => {
     console.log('this is from node scheduler');
     const sheets = google.sheets({version: 'v4', auth});
     sheets.spreadsheets.values.get({
-          spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',    //1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms
-          range: 'Class Data!A1:H10',
+          spreadsheetId: '1m48qn4l172z3hBBJEE9JnnFI43eIyoeBT_Qi5oM34ME',    //1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms
+          //range: 'Class Data!A1:G4',
           valueRenderOption: 'FORMATTED_VALUE',
-          //range: 'Sheet1'   //1m48qn4l172z3hBBJEE9JnnFI43eIyoeBT_Qi5oM34ME
+          range: 'events!A2:K240'   //1m48qn4l172z3hBBJEE9JnnFI43eIyoeBT_Qi5oM34ME
         }, (err, res) => {
           if (err) return console.log('The API returned an error: ' + err);
           const rows = res.data.values;
@@ -80,51 +89,55 @@ function listMajors(auth) {
             // Print columns A and E, which correspond to indices 0 and 4.
             const xyz = rows.map((row) => {
               //console.log(`${row[0]}, ${row[1]}, ${row[2]}, ${row[3]}, ${row[4]}`);
-              return {studentName: row[0],
-                gender: row[1],
-                classLevel: row[2],
-                homeState: row[3],
-                major: row[4],
-                extraActivity: row[5]
+              return {Id: row[0],
+                date: row[1],
+                event: row[2],
+                occasion: row[3],
+                venuetype: row[4],
+                packagetype: row[5],
+                city: row[6],
+                guests: row[7],
+                status: row[8],
+                quality: row[9],
+                budget:row[10]
               };
             });
             //mailer(rows[0]);
             console.log(rows,xyz);
             const qwe = JSON.stringify(xyz);
 
+            fs.writeFile('data.txt', qwe, function(err, data){
+              if (err) {
+                console.log(err);
+              } else{
+                console.log("Successfully Written to File :", data);
+              }
+          });
 
       // Generate test SMTP service account from ethereal.email
       // Only needed if you don't have a real mail account for testing
       nodemailer.createTestAccount((err, account) => {
           // create reusable transporter object using the default SMTP transport
-          let transporter = nodemailer.createTransport({
-              // host: 'smtp.ethereal.email',
-              // port: 587,
-              // secure: false, // true for 465, false for other ports
-              // auth: {
-              //     user: account.user, // generated ethereal user
-              //     pass: account.pass // generated ethereal password
-              // }
-
-              // host: "smtp.gmail.com",
-              // port: 465,
-              // secure: true, // true for 465, false for other ports
-              // user: "ip.businessfirst@gmail.com",
-              // pass: "Nicpunjab@123"
+          let transporter = nodemailer.createTransport({             
               service: 'gmail',
               auth: {
                 user: 'amitykaran74@gmail.com',
-                pass: 'AmitYadav@1012'
+                pass: 'amit@1012yadav'
               }
             });
 
           // setup email data with unicode symbols
           let mailOptions = {
               from: 'amitykaran74@gmail.com', // sender address
-              to: 'vpnydv10year@gmail.com', // list of receivers vpnydv10year@gmail.com
+              to: 'amitykaran74@gmail.com', // list of receivers vpnydv10year@gmail.com
               subject: 'Testing Mail', // Subject line
-              text: 'Hi, This is system generated mail. so dont panic, consult <amit yadav> for any problem.\n'+ 'Here is your data:'+qwe +'', // plain text body
-              //html: '<b>Hello world?</b>' // html body
+              text: 'Hi,\n This is Amit Yadav. As you give me the assignment in which i have to do just access the data from "google sheets" and send it by mail on a interval. I completed the given task as per instruction, if you want some improvement or changes just tell me. \nRegards \nAmit Yadav', // plain text body
+              attachments: [
+                {   
+                  filename: 'mydata.txt',
+                  path: './data.txt' // stream this file
+              },
+              ]
             };
 
           // send mail with defined transport object
