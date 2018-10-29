@@ -1,13 +1,13 @@
 {
-  "name": "node-assignment",
+  "name": "google-spreadsheet-auto",
   "version": "1.0.0",
-  "description": "This in my first node assignment.",
+  "description": "Small script to fetch google sheet data and mail to someone.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Amit Yadav",
+  "author": "Vipin Yadav",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
