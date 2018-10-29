@@ -1,7 +1,7 @@
 {
   "name": "node-assignment",
   "version": "1.0.0",
-  "description": "This in my first node assignment.",
+  "description": "This is node assignment1.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
