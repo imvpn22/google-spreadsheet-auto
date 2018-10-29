@@ -8,7 +8,7 @@ const readline = require('readline');
 const {google} = require('googleapis');
 const schedule = require('node-schedule');
 const nodemailer = require('nodemailer');
-const {transporter_credentials, 
+const {transporter_credentials,
   spreadsheet_credentials,
   mailOptions  } = require('./auth');
 
@@ -68,7 +68,7 @@ function getNewToken(oAuth2Client, callback) {
 }
 
 function listMajors(auth) {
-  //send mail after every minute:5 second 
+  //send mail after every minute:5 second
   var j = schedule.scheduleJob('5 * * * * *', () => {
 
     console.log('this is from node scheduler');
@@ -98,7 +98,7 @@ function listMajors(auth) {
             //console.log(rows,xyz);
             const qwe = JSON.stringify({data: xyz});
 
-            fs.writeFile('data.txt', qwe, function(err, data){
+            fs.writeFile('data.json', qwe, function(err, data){
               if (err) {
                 console.log(err);
               } else{
@@ -106,7 +106,7 @@ function listMajors(auth) {
               }
           });
 
-      
+
       nodemailer.createTestAccount((err, account) => {
           // create reusable transporter object using the default SMTP transport
           //console.log(transporter_credentials);

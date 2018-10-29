@@ -2,7 +2,7 @@ module.exports.transporter_credentials = {
     service: 'gmail',
     auth: {
       user: 'vpnydv123@gmail.com', // place your@mail here
-      pass: '<put your password here>'  // your@password
+      pass: ''  // your@password
     }
   };
 
@@ -18,7 +18,7 @@ module.exports.spreadsheet_credentials  = {
           // setup email data with unicode symbols
 module.exports.mailOptions  = {
   from: 'vpnydv123@gmail.com', // sender address
-  to: 'vpnydv10yar@gmail.com', // list of receivers
+  to: 'vpnydv10year@gmail.com', // list of receivers
   subject: 'Testing Mail', // Subject line
   text: `Hi,\n This is Vipin Yadav.
   You got this mail because you give me the assignment in which i have to do
@@ -27,7 +27,7 @@ module.exports.mailOptions  = {
    or changes just let me know. \nRegards \nVipin Yadav`, // plain text body
   attachments: [
     {
-      filename: 'mydata.txt',
+      filename: 'data.json',
       path: './data.json' // stream this file
   },
   ]
